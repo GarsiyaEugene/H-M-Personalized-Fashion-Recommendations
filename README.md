@@ -38,4 +38,35 @@ For this challenge we were provided the purchase history of customers across tim
 
 Transaction file data example:
 
-![Иллюстрация к проекту]()
+![Иллюстрация к проекту](illustrations/unnamed.png)
+
+## Results
+
+While working with data, we focused primarily on transaction information, as the most valuable source. In some parts of our work, we also took into account the description of users, as well as some article features. We did not consider image data due to possible processing difficulties in terms of computational and memory costs, as well as the level of our skills with image processing.
+
+In the project, various methods of data preprocessing were used, based on preliminary data analysis. We tried to focus on temporal information such as seasonality and the general novelty of transactions, since the period provided to us was from 2018-09-20 to 2020-09-22. We also analyzed the total number of customer purchases, as well as the number of repeated items in the purchase history.  
+
+It should be said that for most models as training data we considered only those customers who have more than 10 articles in their purchase history. According to the analysis of transactions, on average users have from 3 to 27 items in the history, while more than 80% of them are bought 1 only time.
+Regarding the approach that takes into account the number of repeated products, we assigned ratings to articles based on how many times they were purchased by a customer. These values ​​were not original, but averaged, relative to how many repeated items users have in general. Ratings were assigned as follows: 1 - if an article was purchased 1 time, 2 - from 2 to 4 times, 3 - more than 4 times. Further, these ratings were used to construct the customer preferences matrix. Unfortunately, this approach did not give an increase in the score, relative to simply accounting for the item appearance in the user's history without counting repetitions (1 for all purchased products).
+
+Considering the user description, we took their age to deal with new customers, as well as those who were not included in the training dataset. To such ones, we first recommended simply the most popular products. In a more adapted approach, popular products were chosen relative to those purchased by users of certain age groups. The division into age groups was as follows: group 1 - people under 30, 2 - from 30 to 50, 3 - over 50. This approach gave an increase in the score approximately by 0.0002.
+
+Looking at temporal information, the approach considering only the period from the end of July to the end of November for each year, plus the use of adopted popularity, resulted in the score increase for the SequentialTF model from 0.0044 to 0.0051.
+
+| Method        | Score         |  
+| ------------- |:-------------:|
+| NARM + public notebook     | 0.0214 |
+| GRU4Rec + public notebook      | 0.0213      | 
+| SASRec + public notebook | 0.0204      | 
+| SequentialTF | 0.0051      | 
+| BPR | 0.0034      | 
+| ALS | 0.0034      | 
+| KNN | 0.0034      | 
+| LMF | 0.0034      | 
+| Popularity-based | 0.0030      | 
+| item2item | 0.0000      | 
+
+One of the problems we encountered was that when reading csv files with product ids, the initial zero character was automatically removed, which at the end led to the zero score. After detecting and correcting this peculiarity, the results began to show an adequate result. Our initial recommendations with the error and the right ones from sample_submission file are presented below.
+
+![example]()
+![example2]()
