@@ -68,5 +68,13 @@ Looking at temporal information, the approach considering only the period from t
 
 One of the problems we encountered was that when reading csv files with product ids, the initial zero character was automatically removed, which at the end led to the zero score. After detecting and correcting this peculiarity, the results began to show an adequate result. Our initial recommendations with the error and the right ones from sample_submission file are presented below.
 
-![example]()
-![example2]()
+![example](illustrations/unnamed2.jpg)
+![example2](illustrations/unnamed3.jpg)
+
+## Conclusion
+
+At first we had a big difficulty with getting a reasonable score, even with approaches like ALS or item2item, which we used during the course, we got us zero scores with different ways of data preprocessing (whole data, last month/2 month/6 month, seasons data). But it turned out that we had the wrong data indexing. In fact, there was a joke with the id of the goods. They should start from 0, but when reading the csv file, this 0 is removed. And so the predictions give a zero score. 
+
+Most models (BPR, ALS, KNN and LMF) show the same score - 0.0034, and this is only slightly better than the popularity model with 0.0030. This is most likely because the training data was truncated from the original to reduce computational costs, and for new users, popular products were simply recommended.
+
+So, the best score we got is 0.0214 with NARM approach, which is much greater than baseline (0.0063) and, frankly, we a
